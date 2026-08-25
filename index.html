@@ -4,39 +4,134 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Amrita - India Election Assistant | ECI</title>
+  <title>Kartikey - India Election Assistant | ECI</title>
   <meta name="description"
-    content="Amrita is your friendly election guide. Learn how to register as a voter, check eligibility, understand election timelines, and vote on election day — based on official ECI guidelines." />
+    content="Kartikey is your friendly election guide. Learn how to register as a voter, check eligibility, understand election timelines, and vote on election day — based on official ECI guidelines." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
+
+  <!-- ============ LANDING / FRONT PAGE ============ -->
+  <div id="landing-page" class="landing-page">
+    <nav class="landing-nav">
+      <div class="landing-logo">
+        <div class="avatar">K</div>
+        <span>Kartikey</span>
+      </div>
+      <span class="landing-badge">ECI Guided Information</span>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-badge">India Election Assistant</div>
+      <h1>Your Trusted Guide to <span class="highlight">Indian Elections</span></h1>
+      <p class="hero-subtitle">
+        Kartikey is an AI-powered, voice-enabled assistant that helps you register to vote, check your eligibility,
+        find your polling booth, and stay updated on election dates — all based on official Election Commission of
+        India guidelines.
+      </p>
+      <button id="start-chat-btn" class="cta-btn">
+        💬 Chat with Kartikey
+      </button>
+      <p class="hero-note">Requires a Google Gemini API key (Generative AI API key from Google AI Studio).</p>
+    </section>
+
+    <section class="services">
+      <h2>What Kartikey Can Help You With</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🗳️</div>
+          <h3>Voter Registration</h3>
+          <p>Step-by-step guidance on how to register as a new voter or update your details on the electoral roll.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">✅</div>
+          <h3>Eligibility Check</h3>
+          <p>Understand who can vote, age &amp; citizenship criteria, and the documents needed like Voter ID / EPIC.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📅</div>
+          <h3>Election Schedules</h3>
+          <p>Get real-time election dates, phases, and important deadlines using live web search grounding.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📍</div>
+          <h3>Polling Booth Info</h3>
+          <p>Learn how to locate your polling booth and what to carry with you on election day.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🌐</div>
+          <h3>Bilingual Support</h3>
+          <p>Converse comfortably in English or Hinglish, exactly the way you'd naturally speak.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🎙️</div>
+          <h3>Voice Interaction</h3>
+          <p>Speak your questions with the microphone and listen to spoken answers, completely hands-free.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <p>Enter your free Google Gemini API key — it stays only in your browser.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <p>Ask any election-related question by typing or speaking.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <p>Get accurate, real-time answers based on official ECI guidelines.</p>
+        </div>
+      </div>
+      <button id="start-chat-btn-2" class="cta-btn cta-btn-outline">Get Started Now →</button>
+    </section>
+
+    <footer class="landing-footer">
+      © 2026 Kartikey — India Election Assistant
+      &nbsp;·&nbsp; Voter Helpline: <strong>1950</strong>
+    </footer>
+  </div>
+
+  <!-- ============ API KEY MODAL ============ -->
   <div id="api-key-modal" class="modal-overlay hidden">
     <div class="modal-content">
-      <h2>Welcome to Amrita 🇮🇳</h2>
-      <p>Please enter your Google Gemini API Key to use the Election Assistant. It stays completely safe in your browser's local storage.</p>
-      <input type="password" id="api-key-input" placeholder="Paste your API key here..." autocomplete="off" />
+      <h2>Welcome to Kartikey 🇮🇳</h2>
+      <p>Please enter your Google Gemini API key to use Kartikey. This is a Generative AI API key from Google AI Studio (Gemini); it is stored only in your browser's localStorage and never sent to any server.</p>
+      <input type="password" id="api-key-input" placeholder="Paste your Google Gemini API key here..." autocomplete="off" />
       <button id="save-key-btn">Save & Start Chatting</button>
       <p class="small-text">Need a key? Get one free from <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</p>
     </div>
   </div>
 
-  <div class="app-wrapper">
+  <!-- ============ CHAT APP ============ -->
+  <div class="app-wrapper hidden" id="app-wrapper">
     <div class="chat-container">
 
       <header class="chat-header">
         <div class="avatar-wrap">
-          <div class="avatar">A</div>
+          <div class="avatar">K</div>
           <div class="online-dot"></div>
         </div>
         <div class="header-info">
-          <h1>Amrita</h1>
+          <h1>Kartikey</h1>
           <p class="subtitle">
             India Election Assistant &nbsp;·&nbsp;
             <span class="status-text">Online</span>
           </p>
         </div>
         <div class="header-actions">
+          <button id="home-btn" class="icon-btn" title="Back to Home" aria-label="Back to Home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M3 11.5 12 4l9 7.5" />
+              <path d="M5 10v9h14v-9" />
+            </svg>
+          </button>
           <button id="reset-btn" class="icon-btn" title="Start over / Change API Key" aria-label="Start over">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
               stroke-linejoin="round">
@@ -86,7 +181,7 @@
     </div>
 
     <div class="chat-footer">
-      © 2026 Amrita — India Election Assistant
+      © 2026 Kartikey — India Election Assistant
       &nbsp;·&nbsp; Voter Helpline: <strong>1950</strong>
     </div>
   </div>

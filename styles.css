@@ -57,6 +57,203 @@ body::after {
   bottom: -100px; right: -100px;
 }
 
+/* ---- UTILITY ---- */
+.hidden { display: none !important; }
+
+/* =====================================================
+   LANDING / FRONT PAGE
+   ===================================================== */
+.landing-page {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  background: linear-gradient(145deg, var(--bg-from) 0%, #fff 45%, var(--bg-to) 100%);
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.landing-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--navy);
+}
+.landing-logo .avatar {
+  width: 38px; height: 38px;
+  font-size: 17px;
+}
+.landing-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  background: rgba(19,136,8,0.08);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.hero {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 30px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--saffron-dk);
+  background: rgba(255,153,51,0.1);
+  border: 1px solid rgba(255,153,51,0.25);
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--saffron), var(--green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-subtitle {
+  font-size: 15.5px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.cta-btn {
+  background: linear-gradient(135deg, var(--saffron), var(--saffron-dk));
+  color: #fff;
+  border: none;
+  padding: 15px 34px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(255,153,51,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(255,153,51,0.45);
+}
+.cta-btn:active { transform: scale(0.97); }
+.cta-btn-outline {
+  background: transparent;
+  color: var(--navy);
+  border: 2px solid var(--saffron);
+  box-shadow: none;
+}
+.cta-btn-outline:hover {
+  background: rgba(255,153,51,0.08);
+  box-shadow: none;
+}
+.hero-note {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.services {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 24px 10px;
+}
+.services h2, .how-it-works h2 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 26px;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.service-card {
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.service-icon { font-size: 28px; margin-bottom: 12px; }
+.service-card h3 { font-size: 15.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.service-card p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+.how-it-works {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  text-align: center;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 30px;
+}
+.step {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius);
+  padding: 24px 18px;
+  box-shadow: var(--shadow-sm);
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--saffron), var(--green));
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.step p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+.landing-footer {
+  text-align: center;
+  padding: 24px 20px 36px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.landing-footer strong { color: var(--navy); }
+
+@media (max-width: 700px) {
+  .landing-nav { padding: 16px 20px; }
+  .hero { padding: 30px 20px 24px; }
+  .hero h1 { font-size: 28px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+}
+
 /* ---- OUTER WRAPPER ---- */
 .app-wrapper {
   position: relative;
@@ -250,6 +447,11 @@ body::after {
 .msg-link { color: var(--saffron); font-weight: 600; text-decoration: underline; }
 .msg-group.user .message .msg-link { color: #fff; }
 
+/* timestamp shown below bot messages indicating data currency */
+.msg-as-of {
+  font-size: 11px; color: var(--muted); margin-top: 6px; margin-left: 40px;
+}
+
 /* timestamps */
 .msg-time {
   font-size: 10px; color: var(--muted);
@@ -413,9 +615,6 @@ body::after {
   #send-btn { width: 44px; height: 44px; }
   /* Ensure the container leaves space for iOS home indicator */
   .chat-input-container { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
-<<<<<<< HEAD
-}
-=======
 }           
 /* =====================================================
    API KEY MODAL OVERLAY
@@ -470,4 +669,3 @@ body::after {
   font-size: 12px !important; margin-top: 15px !important; margin-bottom: 0 !important;
 }
 .small-text a { color: var(--saffron); font-weight: 600; text-decoration: none; }
->>>>>>> ea80079d4bde2f1c79b03ff30a7a6ef0e980bcb5

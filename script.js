@@ -1,17 +1,17 @@
 // ==========================================
-// AMRITA: ELECTION ASSISTANT - ENGLISH & HINGLISH
+// KARTIKEY: ELECTION ASSISTANT - ENGLISH & HINGLISH
 // ==========================================
 
 // --- API KEY & LANGUAGE HANDLING ---
 let API_KEY = localStorage.getItem('gemini_api_key') || "";
-let LANG_PREF = localStorage.getItem('amrita_lang') || 'en';
+let LANG_PREF = localStorage.getItem('kartikey_lang') || 'en';
 const langSelect = document.getElementById('lang-select');
 
 function getSystemInstructionFor(lang) {
     if (lang === 'en-hinglish') {
-        return "You are Amrita, a professional India Election Assistant. LANGUAGE RULES: Prefer English but allow Hinglish (Hindi written in Latin letters) when the user uses it. NEVER use Devanagari script. Keep answers concise and neutral, based on Election Commission of India guidance. Always use google_search to get current info.";
+        return "You are Kartikey, a professional India Election Assistant. LANGUAGE RULES: Prefer English but allow Hinglish (Hindi written in Latin letters) when the user uses it. NEVER use Devanagari script. Keep answers concise and neutral, based on Election Commission of India guidance. Always use google_search to get current info.";
     }
-    return "You are Amrita, a professional India Election Assistant. LANGUAGE RULES: Always reply in English regardless of the user's input. NEVER use Hinglish or Devanagari script. Keep answers concise. Provide neutral, factual info based on the Election Commission of India. Always use google_search to get current info.";
+    return "You are Kartikey, a professional India Election Assistant. LANGUAGE RULES: Always reply in English regardless of the user's input. NEVER use Hinglish or Devanagari script. Keep answers concise. Provide neutral, factual info based on the Election Commission of India. Always use google_search to get current info.";
 }
 
 let SYSTEM_INSTRUCTION_TEXT = getSystemInstructionFor(LANG_PREF);
@@ -20,7 +20,7 @@ if (langSelect) {
     langSelect.value = LANG_PREF;
     langSelect.addEventListener('change', (e) => {
         LANG_PREF = e.target.value;
-        localStorage.setItem('amrita_lang', LANG_PREF);
+        localStorage.setItem('kartikey_lang', LANG_PREF);
         SYSTEM_INSTRUCTION_TEXT = getSystemInstructionFor(LANG_PREF);
     });
 }
@@ -29,74 +29,113 @@ const modal = document.getElementById('api-key-modal');
 const saveKeyBtn = document.getElementById('save-key-btn');
 const keyInput = document.getElementById('api-key-input');
 
-if (!API_KEY) {
-    modal.classList.remove('hidden');
-}
+// --- LANDING PAGE <-> CHAT APP NAVIGATION ---
+const landingPage = document.getElementById('landing-page');
+const appWrapper = document.getElementById('app-wrapper');
 
-saveKeyBtn.addEventListener('click', () => {
-    const key = keyInput.value.trim();
-    if (key.length > 20) { 
-        API_KEY = key;
-        localStorage.setItem('gemini_api_key', API_KEY);
-        modal.classList.add('hidden');
-    } else {
-        alert("Please enter a valid Google Gemini API Key.");
-    }
-});
-
-// --- CHAT & UI EVENT LISTENERS ---
-document.getElementById('chat-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    sendMessage();
-});
-
-document.getElementById('reset-btn').addEventListener('click', () => {
-    if (confirm("Do you want to clear the chat and change the API key?")) {
-        document.getElementById('chat-messages').innerHTML = '';
-        window.speechSynthesis.cancel();
-        localStorage.removeItem('gemini_api_key');
-        API_KEY = "";
+function openChatApp() {
+    landingPage.classList.add('hidden');
+    appWrapper.classList.remove('hidden');
+    if (!API_KEY) {
         modal.classList.remove('hidden');
     }
-});
+    if (document.getElementById('chat-messages').childElementCount === 0) {
+        renderQuickReplies(DEFAULT_QUICK_REPLIES);
+    }
+}
 
-// --- VOICE FEATURES (Female Voice + English/Hinglish Reading) ---
-function speakAmrita(text) {
+function goHome() {
+    appWrapper.classList.add('hidden');
+    modal.classList.add('hidden');
+    landingPage.classList.remove('hidden');
+}
+
+const startChatBtn = document.getElementById('start-chat-btn');
+const startChatBtn2 = document.getElementById('start-chat-btn-2');
+const homeBtn = document.getElementById('home-btn');
+
+if (startChatBtn) startChatBtn.addEventListener('click', openChatApp);
+if (startChatBtn2) startChatBtn2.addEventListener('click', openChatApp);
+if (homeBtn) homeBtn.addEventListener('click', goHome);
+if (saveKeyBtn) {
+    saveKeyBtn.addEventListener('click', () => {
+        const key = keyInput.value.trim();
+        if (key.length > 20) {
+            API_KEY = key;
+            localStorage.setItem('gemini_api_key', API_KEY);
+            if (modal) modal.classList.add('hidden');
+        } else {
+            alert("Please enter a valid Google Gemini API Key.");
+        }
+    });
+}
+
+// --- CHAT & UI EVENT LISTENERS ---
+const chatForm = document.getElementById('chat-form');
+if (chatForm) {
+    chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        sendMessage();
+    });
+}
+
+const resetBtn = document.getElementById('reset-btn');
+if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+        if (confirm("Do you want to clear the chat and change the API key?")) {
+            const msgs = document.getElementById('chat-messages');
+            if (msgs) msgs.innerHTML = '';
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            localStorage.removeItem('gemini_api_key');
+            API_KEY = "";
+            if (modal) modal.classList.remove('hidden');
+            renderQuickReplies(DEFAULT_QUICK_REPLIES);
+        }
+    });
+}
+
+// --- VOICE FEATURES (Male Voice + English/Hinglish Reading) ---
+function speakKartikey(text) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel(); 
         const cleanText = text.replace(/[*#]/g, ''); 
         const utterance = new SpeechSynthesisUtterance(cleanText);
         
         const voices = window.speechSynthesis.getVoices();
-        let amritaVoice = null;
+        let kartikeyVoice = null;
 
-        const preferredFemaleVoices = [
-            "Microsoft Heera", "Microsoft Neerja", "Aditi", 
-            "Google UK English Female", "Microsoft Zira", "Samantha", "Victoria"
+        const preferredMaleVoices = [
+            "Microsoft Ravi", "Microsoft David", "Microsoft Prabhat",
+            "Google UK English Male", "Microsoft Mark", "Daniel", "Alex", "Fred"
         ];
         
-        for (let name of preferredFemaleVoices) {
-            amritaVoice = voices.find(v => v.name.includes(name));
-            if (amritaVoice) break;
+        for (let name of preferredMaleVoices) {
+            kartikeyVoice = voices.find(v => v.name.includes(name));
+            if (kartikeyVoice) break;
         }
 
-        if (!amritaVoice) {
-            amritaVoice = voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'));
+        if (!kartikeyVoice) {
+            kartikeyVoice = voices.find(v => {
+                const n = v.name.toLowerCase();
+                return (n.includes('male') && !n.includes('female')) || (n.includes('man') && !n.includes('woman'));
+            });
         }
         
-        if (amritaVoice) {
-            utterance.voice = amritaVoice;
-            console.log("Speaking with female voice: ", amritaVoice.name);
+        if (kartikeyVoice) {
+            utterance.voice = kartikeyVoice;
+            console.log("Speaking with male voice: ", kartikeyVoice.name);
         }
         
-        utterance.lang = 'en-IN';
+        utterance.lang = 'en';
         utterance.rate = 1.0; 
-        utterance.pitch = 1.3;
+        utterance.pitch = 0.85;
         
         window.speechSynthesis.speak(utterance);
     }
 }
-window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 
 // --- MICROPHONE SETUP ---
 const micBtn = document.getElementById('mic-btn');
@@ -106,7 +145,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 if (SpeechRecognition && micBtn) {
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.lang = 'en-IN';
+    recognition.lang = 'en';
     recognition.interimResults = false;
 
     let isListening = false;
@@ -151,6 +190,44 @@ if (SpeechRecognition && micBtn) {
     micBtn.style.display = 'none'; 
 }
 
+// --- QUICK REPLIES ---
+const DEFAULT_QUICK_REPLIES = [
+    "How do I register to vote?",
+    "Am I eligible to vote?",
+    "When are the next elections?",
+    "How do I find my polling booth?"
+];
+
+const FOLLOW_UP_QUICK_REPLIES = [
+    "Tell me more",
+    "What documents do I need?",
+    "How do I check my status?",
+    "What's the Voter Helpline number?"
+];
+
+function renderQuickReplies(options) {
+    const container = document.getElementById('quick-replies');
+    if (!container) return;
+    container.innerHTML = '';
+    options.forEach((text) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'quick-reply-btn';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+            const input = document.getElementById('chat-input');
+            input.value = text;
+            sendMessage();
+        });
+        container.appendChild(btn);
+    });
+}
+
+function clearQuickReplies() {
+    const container = document.getElementById('quick-replies');
+    if (container) container.innerHTML = '';
+}
+
 // --- MESSAGE ELEMENT CREATION ---
 function createMessageElement(isUser, content, useHTML=false) {
     const group = document.createElement('div');
@@ -161,7 +238,7 @@ function createMessageElement(isUser, content, useHTML=false) {
 
     const avatar = document.createElement('div');
     avatar.className = 'msg-avatar';
-    avatar.textContent = isUser ? 'Y' : 'A';
+    avatar.textContent = isUser ? 'Y' : 'K';
     row.appendChild(avatar);
 
     const msg = document.createElement('div');
@@ -185,7 +262,16 @@ async function sendMessage() {
     const history = document.getElementById('chat-messages');
     const userText = input.value.trim();
 
-    if (!userText || !API_KEY) return;
+    if (!userText) return;
+    if (!API_KEY) {
+        if (modal) modal.classList.remove('hidden');
+        alert('Please enter your Google Gemini API key to continue.');
+        return;
+    }
+
+    if (!history) return;
+
+    clearQuickReplies();
 
     const userEl = createMessageElement(true, userText, false);
     history.appendChild(userEl);
@@ -229,10 +315,15 @@ async function sendMessage() {
 
         const formattedReply = aiReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         const botEl = createMessageElement(false, formattedReply, true);
+        const asOf = document.createElement('div');
+        asOf.className = 'msg-as-of';
+        asOf.textContent = 'Info current as of ' + new Date().toLocaleString();
+        botEl.appendChild(asOf);
         history.appendChild(botEl);
         history.scrollTop = history.scrollHeight;
 
-        speakAmrita(aiReply);
+        speakKartikey(aiReply);
+        renderQuickReplies(FOLLOW_UP_QUICK_REPLIES);
 
     } catch (error) {
         console.error(error);
